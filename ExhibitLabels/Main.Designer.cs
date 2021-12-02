@@ -167,6 +167,11 @@
             this.txtWorksheetNumber.Name = "txtWorksheetNumber";
             this.txtWorksheetNumber.Size = new System.Drawing.Size(120, 26);
             this.txtWorksheetNumber.TabIndex = 32;
+            this.txtWorksheetNumber.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // txtStartRow
             // 

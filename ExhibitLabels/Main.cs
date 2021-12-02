@@ -15,6 +15,8 @@ namespace ExhibitLabels
 {
     public partial class Main : Form
     {
+        private const string V = "{0:C}";
+
         public Main()
         {
             InitializeComponent();
@@ -76,13 +78,19 @@ namespace ExhibitLabels
             Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(@txtFileName.Text);
             Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[intWorksheetNum];
 
-            icol = 0;
-            var cellValue = (string)(xlWorksheet.Cells[0, icol].Value);
 
-            while (cellValue != "")
+
+            //Excel.Workbook excelWorkbook = xlApp.Workbooks.Open(txtFileName.Text, 0, false, 5, "", "", false, Excel.XlPlatform.xlWindows, "", true, false, 0, true, false, false);
+            //Excel.Sheets excelSheets = excelWorkbook.Worksheets;
+            //string currentSheet = "Sheet1";
+            //Excel.Worksheet excelWorksheet = (Excel.Worksheet)excelSheets.get_Item(currentSheet);
+            icol = 1;
+            var cellValue = (string)(xlWorksheet.Cells[1, icol] as Excel.Range).Value;
+
+            while (cellValue != "" && cellValue != null)
             {
 
-                switch (xlWorksheet.Cells[0, icol].Value.ToUpper())
+                switch (cellValue.ToUpper())
                 {
                     case CCArtist:
                         iColArtist = icol;
@@ -95,7 +103,7 @@ namespace ExhibitLabels
                         break;
                 }
                 icol++;
-                cellValue = (string)(xlWorksheet.Cells[0, icol].Value);
+                cellValue = (string)(xlWorksheet.Cells[1, icol] as Excel.Range).Value;
             }
 
             objWordApp = new Word.Application();
@@ -128,17 +136,13 @@ namespace ExhibitLabels
             //    objWordApp.Selection.MoveRight(Unit:= 12);
             //}
 
-            irow = 1;
-            while (xlWorksheet.Cells[irow, iColArtist].value != "")
+            irow = 2;
+            while (xlWorksheet.Cells[irow, iColArtist].value != "" && xlWorksheet.Cells[irow, iColArtist].value != null)
             {
 
                 strArtist = xlWorksheet.Cells[irow, iColArtist].Value;
                 strTitle = xlWorksheet.Cells[irow, iColTitle].Value;
-
-                if (IsNumeric(xlWorksheet.Cells[irow, iColPrice].Value))
-                    strPrice = xlWorksheet.Cells[irow, iColPrice].Value.ToString("{0:C}");
-                else
-                    strPrice = xlWorksheet.Cells[irow, iColPrice].Value;
+                strPrice = xlWorksheet.Cells[irow, iColPrice].Value.ToString();
 
                 strOut = System.Environment.NewLine + "" + strTitle + "" + System.Environment.NewLine;
                 strOut = strOut + strArtist.Trim() + System.Environment.NewLine;
@@ -155,19 +159,15 @@ namespace ExhibitLabels
                 objWordApp.Selection.ParagraphFormat.SpaceAfterAuto = 0;
                 objWordApp.Selection.ParagraphFormat.SpaceAfter = 0;
                 objWordApp.Selection.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                //objWordApp.Selection.TypeText(Text:= strOut);
+                objWordApp.Selection.TypeText(strOut);
                 //objWordApp.Selection.MoveRight(Unit:= 12);
-
 
                 irow++;
 
             }
 
+            MessageBox.Show("Done");
 
-        bool IsNumeric(string value)
-        {
-            return value.All(char.IsNumber);
         }
     }
-}
 }
