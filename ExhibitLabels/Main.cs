@@ -78,12 +78,6 @@ namespace ExhibitLabels
             Excel.Workbook xlWorkbook = xlApp.Workbooks.Open(@txtFileName.Text);
             Excel._Worksheet xlWorksheet = xlWorkbook.Sheets[intWorksheetNum];
 
-
-
-            //Excel.Workbook excelWorkbook = xlApp.Workbooks.Open(txtFileName.Text, 0, false, 5, "", "", false, Excel.XlPlatform.xlWindows, "", true, false, 0, true, false, false);
-            //Excel.Sheets excelSheets = excelWorkbook.Worksheets;
-            //string currentSheet = "Sheet1";
-            //Excel.Worksheet excelWorksheet = (Excel.Worksheet)excelSheets.get_Item(currentSheet);
             icol = 1;
             var cellValue = (string)(xlWorksheet.Cells[1, icol] as Excel.Range).Value;
 
@@ -125,16 +119,19 @@ namespace ExhibitLabels
             objWordApp.Selection.Cells.VerticalAlignment = (Word.WdCellVerticalAlignment)1;
             objWordApp.Selection.Font.Name = "Calibri";
             objWordApp.Selection.Font.Size = 9;
-            //objWordApp.Selection.HomeKey(Unit:= 5);
 
             intStartLabelCol = Convert.ToInt32(Math.Round(txtStartCol.Value, 0));
             intStartLabelRow = Convert.ToInt32(Math.Round(txtStartRow.Value, 0));
             intTemp = ((intStartLabelRow - 1) * 3) + intStartLabelCol;
 
-            //for (iCtr = 2; iCtr == intTemp; iCtr++)
-            //{
-            //    objWordApp.Selection.MoveRight(Unit:= 12);
-            //}
+            object dummy = System.Reflection.Missing.Value;
+            object count = 1;
+            object Unit = Word.WdUnits.wdCell;
+
+            for (iCtr = 2; iCtr == intTemp; iCtr++)
+            {
+                objWordApp.Application.Selection.MoveRight(ref Unit, ref count, ref dummy);
+            }
 
             irow = 2;
             while (xlWorksheet.Cells[irow, iColArtist].value != "" && xlWorksheet.Cells[irow, iColArtist].value != null)
@@ -144,7 +141,7 @@ namespace ExhibitLabels
                 strTitle = xlWorksheet.Cells[irow, iColTitle].Value;
                 strPrice = xlWorksheet.Cells[irow, iColPrice].Value.ToString();
 
-                strOut = System.Environment.NewLine + "" + strTitle + "" + System.Environment.NewLine;
+                strOut = System.Environment.NewLine + "\"" + strTitle + "\"" + System.Environment.NewLine;
                 strOut = strOut + strArtist.Trim() + System.Environment.NewLine;
                 strOut = strOut + "St. James’ Camera Club" + System.Environment.NewLine;
 
@@ -160,13 +157,13 @@ namespace ExhibitLabels
                 objWordApp.Selection.ParagraphFormat.SpaceAfter = 0;
                 objWordApp.Selection.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
                 objWordApp.Selection.TypeText(strOut);
-                //objWordApp.Selection.MoveRight(Unit:= 12);
+                objWordApp.Application.Selection.MoveRight(ref Unit, ref count, ref dummy);
 
                 irow++;
 
             }
 
-            MessageBox.Show("Done");
+            MessageBox.Show("Done.");
 
         }
     }

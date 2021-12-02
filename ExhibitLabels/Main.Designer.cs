@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.Label2 = new System.Windows.Forms.Label();
             this.Label8 = new System.Windows.Forms.Label();
             this.Label7 = new System.Windows.Forms.Label();
@@ -216,8 +217,9 @@
             this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.Label1);
             this.Controls.Add(this.txtFileName);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
-            this.Text = "Form1";
+            this.Text = "Exhibit Labels";
             ((System.ComponentModel.ISupportInitialize)(this.txtWorksheetNumber)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtStartRow)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtStartCol)).EndInit();
